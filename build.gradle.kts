@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "1.8.0"
 }
 
-group = "hes.sudoku"
+group = "hes.nonogram"
 version = "1.0-SNAPSHOT"
 
 repositories {

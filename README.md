@@ -1,2 +1,2 @@
-# Sudoku
-A Sudoku Solver
+# Nonogram
+Solver for nonogram puzzles

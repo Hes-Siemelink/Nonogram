@@ -1,2 +1,2 @@
-rootProject.name = "sudoku"
+rootProject.name = "nonogram"
 
