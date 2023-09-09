@@ -34,6 +34,10 @@ enum class State(private val value: Char) {
         return value.toString()
     }
 
+    fun times(size: Int): List<State> {
+        return (1..size).map { this }
+    }
+
     companion object {
         fun from(char: Char): State {
             State.values().forEach {

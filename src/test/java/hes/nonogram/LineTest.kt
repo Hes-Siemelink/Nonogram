@@ -103,7 +103,7 @@ class LineTest {
 
     @Test
     fun `generate possibilities for (1) length 5`() {
-        val result = allPossibilities(listOf(1), 5).map { it.asString() }
+        val result = generate(listOf(1), 5).map { it.asString() }
 
         result.forEach {
             println(it)
@@ -123,7 +123,7 @@ class LineTest {
 
     @Test
     fun `generate possibilities for (1,1) length 5`() {
-        val result = allPossibilities(listOf(1, 1), 5).map { it.asString() }
+        val result = generate(listOf(1, 1), 5).map { it.asString() }
 
         result.forEach {
             println(it)
