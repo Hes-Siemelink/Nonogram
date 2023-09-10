@@ -21,79 +21,79 @@ class LineTest {
 
     @Test
     fun `segment validation with hint of size 1`() {
-        assertTrue(LineSegment(1, ".").isValid())
-        assertTrue(LineSegment(1, "..").isValid())
-        assertTrue(LineSegment(1, "*.").isValid())
-        assertTrue(LineSegment(1, ".*").isValid())
-        assertTrue(LineSegment(1, "*-").isValid())
-        assertTrue(LineSegment(1, "-*").isValid())
-        assertTrue(LineSegment(1, "--*..").isValid())
+        assertTrue(LineSegment(".", 1).isValid())
+        assertTrue(LineSegment("..", 1).isValid())
+        assertTrue(LineSegment("*.", 1).isValid())
+        assertTrue(LineSegment(".*", 1).isValid())
+        assertTrue(LineSegment("*-", 1).isValid())
+        assertTrue(LineSegment("-*", 1).isValid())
+        assertTrue(LineSegment("--*..", 1).isValid())
 
-        assertFalse(LineSegment(1, "**").isValid())
-        assertFalse(LineSegment(1, "--").isValid())
+        assertFalse(LineSegment("**", 1).isValid())
+        assertFalse(LineSegment("--", 1).isValid())
     }
 
     @Test
     fun `segment validation with hint of size 2`() {
-        assertTrue(LineSegment(2, "..").isValid())
-        assertTrue(LineSegment(2, "*.").isValid())
-        assertTrue(LineSegment(2, ".*").isValid())
-        assertTrue(LineSegment(2, "--*..").isValid())
-        assertTrue(LineSegment(2, "**").isValid())
+        assertTrue(LineSegment("..", 2).isValid())
+        assertTrue(LineSegment("*.", 2).isValid())
+        assertTrue(LineSegment(".*", 2).isValid())
+        assertTrue(LineSegment("--*..", 2).isValid())
+        assertTrue(LineSegment("**", 2).isValid())
 
-        assertFalse(LineSegment(2, "*-").isValid())
-        assertFalse(LineSegment(2, "-*").isValid())
-        assertFalse(LineSegment(2, "--").isValid())
+        assertFalse(LineSegment("*-", 2).isValid())
+        assertFalse(LineSegment("-*", 2).isValid())
+        assertFalse(LineSegment("--", 2).isValid())
     }
 
     @Test
     fun `line validation for 1 hint`() {
-        assertTrue(Line(listOf(1), ".").isValid())
-        assertTrue(Line(listOf(1), "..").isValid())
-        assertTrue(Line(listOf(2), "*.").isValid())
-        assertTrue(Line(listOf(3), "-***").isValid())
-        assertTrue(Line(listOf(3), "***--").isValid())
-        assertTrue(Line(listOf(3), "-*...").isValid())
+        assertTrue(Line(".", 1).isValid())
+        assertTrue(Line("..", 1).isValid())
+        assertTrue(Line("*.", 2).isValid())
+        assertTrue(Line("-***", 3).isValid())
+        assertTrue(Line("***--", 3).isValid())
+        assertTrue(Line("-*...", 3).isValid())
     }
 
     @Test
     fun `line validation for 2 hints`() {
-        assertTrue(Line(listOf(1, 1), "...").isValid())
-        assertTrue(Line(listOf(1, 1), "*.*").isValid())
-        assertTrue(Line(listOf(1, 3), "..*.*").isValid())
-        assertTrue(Line(listOf(1, 1), "-*..").isValid())
-        assertTrue(Line(listOf(1, 2), "*-*..").isValid())
-        assertTrue(Line(listOf(1, 1, 1), "*-*.*").isValid())
-        assertTrue(Line(listOf(4, 1), "..****..").isValid())
-        assertTrue(Line(listOf(1, 4), "..****..").isValid())
-        assertTrue(Line(listOf(1, 1), "*-*..").isValid())
+        assertTrue(Line("...", 1, 1).isValid())
+        assertTrue(Line("*.*", 1, 1).isValid())
+        assertTrue(Line("..*.*", 1, 3).isValid())
+        assertTrue(Line("-*..", 1, 1).isValid())
+        assertTrue(Line("*-*..", 1, 2).isValid())
+        assertTrue(Line("*-*.*", 1, 1, 1).isValid())
+        assertTrue(Line("..****..", 4, 1).isValid())
+        assertTrue(Line("..****..", 1, 4).isValid())
+        assertTrue(Line("*-*..", 1, 1).isValid())
 
-        assertFalse(Line(listOf(1, 1), ".*.").isValid())
-        assertFalse(Line(listOf(1, 1, 1), ".*.*.").isValid())
-        assertFalse(Line(listOf(1, 1), "---*").isValid())
-        assertFalse(Line(listOf(2, 1), ".***..").isValid())
-        assertFalse(Line(listOf(2, 2), "****").isValid())
+        assertFalse(Line(".*.", 1, 1).isValid())
+        assertFalse(Line(".*.*.", 1, 1, 1).isValid())
+        assertFalse(Line("---*", 1, 1).isValid())
+        assertFalse(Line(".***..", 2, 1).isValid())
+        assertFalse(Line("****", 2, 2).isValid())
     }
 
     @Test
     fun `line validation for 3 hints`() {
-        assertTrue(Line(listOf(1, 1, 1), ".....").isValid())
+        assertTrue(Line(".....", 1, 1, 1).isValid())
 
-        assertFalse(Line(listOf(2, 2, 2), "**....-.").isValid())
+        assertFalse(Line("**....-.", 2, 2, 2).isValid())
     }
 
     @Test
     fun `line solved`() {
-        assertTrue(Line(listOf(1), "*").isSolved())
-        assertTrue(Line(listOf(1, 2), "*-**.").isSolved())
+        assertTrue(Line("*", 1).isSolved())
+        assertTrue(Line("*-**.", 1, 2).isSolved())
 
-        assertFalse(Line(listOf(1, 2), "*-.*.").isSolved())
-        assertFalse(Line(listOf(1, 2), "*-***").isSolved())
+        assertFalse(Line("*-.*.", 1, 2).isSolved())
+        assertFalse(Line("*-***", 1, 2).isSolved())
     }
 
     @Test
     fun `copy line`() {
-        val line = Line(listOf(1), "...")
+        val line = Line("...", 1)
 
         val copy = line.copy()
         copy.cells[0].state = FILLED
@@ -104,52 +104,52 @@ class LineTest {
 
     @Test
     fun `generate possibilities for (1) length 5`() {
-        val result = allSolutions(listOf(1), 5).map { it.asString() }
+        val result = allSolutions(listOf(1), 5)
+            .map { it.asString() }
 
         result.forEach {
             println(it)
         }
 
-        assertIterableEquals(
+        assertThat(result).containsExactlyInAnyOrderElementsOf(
             listOf(
                 "*----",
                 "-*---",
                 "--*--",
                 "---*-",
                 "----*"
-            ),
-            result
-        )
+            ))
     }
 
     @Test
     fun `generate possibilities for (1,1) length 5`() {
-        val result = allSolutions(listOf(1, 1), 5).map { it.asString() }
+        val result = allSolutions(listOf(1, 1), 5)
+            .map { it.asString() }
 
-        assertThat(result).containsExactlyInAnyOrderElementsOf(listOf(
-            "*-*--",
-            "*--*-",
-            "*---*",
-            "-*-*-",
-            "-*--*",
-            "--*-*"
-        ))
+        assertThat(result).containsExactlyInAnyOrderElementsOf(
+            listOf(
+                "*-*--",
+                "*--*-",
+                "*---*",
+                "-*-*-",
+                "-*--*",
+                "--*-*"
+            ))
     }
 
     @Test
-    fun `generate possibilities for (1,1) length 5 with hints`() {
+    fun `generate possibilities for (1,1) length 5 given a partial solution`() {
 
-        val line = Line(listOf(1, 1), "*....")
-        val result = line.possibileSolutions().map { it.asString() }
+        val line = Line("*....", 1, 1)
 
-        result.forEach {
-            println(it)
-        }
+        val result = line.possibleSolutions()
+            .map { it.asString() }
 
-        assertThat(result).containsExactlyInAnyOrderElementsOf(listOf(
-            "*-*--",
-            "*--*-",
-            "*---*",
-        ))
+        assertThat(result).containsExactlyInAnyOrderElementsOf(
+            listOf(
+                "*-*--",
+                "*--*-",
+                "*---*",
+            ))
     }
 }

@@ -23,7 +23,7 @@ fun Line.isValid(): Boolean {
         }
 
         try {
-            val segment = LineSegment(hint, cells.subList(left, cells.size - right))
+            val segment = LineSegment(cells.subList(left, cells.size - right), hint)
 
             // Check if segment where this hint should lie is valid
             if (!segment.isValid()) {
@@ -104,9 +104,9 @@ fun lengthOf(hints: List<Int>): Int {
 }
 
 
-class LineSegment(val hint: Int, val cells: List<Cell>) {
+class LineSegment(val cells: List<Cell>, val hint: Int) {
 
-    constructor(hint: Int, s: String) : this(hint, Cell.from(s))
+    constructor(cells: String, hint: Int) : this(Cell.from(cells), hint)
 
     fun isValid(): Boolean {
         for (i in 0..cells.size - hint) {

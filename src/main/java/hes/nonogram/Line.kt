@@ -3,16 +3,16 @@ package hes.nonogram
 import hes.nonogram.Cell.Companion.from
 import hes.nonogram.State.*
 
-class Line(val hints: List<Int>, val cells: List<Cell>) {
+class Line(val cells: List<Cell>, val hints: List<Int>) {
 
-    constructor(hints: List<Int>, s: String) : this(hints, from(s))
+    constructor(cells: String, vararg hints: Int) : this(from(cells), hints.toList())
 
     override fun toString(): String {
         return cells.asString()
     }
 
     fun copy(): Line {
-        return Line(hints, cells.map { it.copy() })
+        return Line(cells.map { it.copy() }, hints)
     }
 
     fun isSolved(): Boolean {
@@ -35,7 +35,8 @@ class Line(val hints: List<Int>, val cells: List<Cell>) {
         return counted == hints
     }
 
-    fun possibileSolutions(): List<List<State>> {
+    fun possibleSolutions(): List<List<State>> {
+        // TODO make more efficient byt combining filtering in 'allSolutions'.
         val all = allSolutions(hints, cells.size)
 
         return all.filter { this.isSolvedBy(it) }

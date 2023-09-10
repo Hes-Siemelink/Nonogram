@@ -22,8 +22,8 @@ class Puzzle(
             }
         }
 
-        rows = rowHints.mapIndexed { index, hints -> Line(hints, row(index)) }
-        columns = columnHints.mapIndexed { index, hints -> Line(hints, column(index)) }
+        rows = rowHints.mapIndexed { index, hints -> Line(row(index), hints) }
+        columns = columnHints.mapIndexed { index, hints -> Line(column(index), hints) }
     }
 
     private fun row(index: Int): List<Cell> {
