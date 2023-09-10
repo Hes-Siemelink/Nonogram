@@ -9,7 +9,7 @@ import org.opentest4j.AssertionFailedError
 class PuzzleTest {
 
     @Test
-    fun `solve simple puzzle`() {
+    fun `solve simple puzzle recursively`() {
         val puzzle = nonogram {
             row(1)
             row()
@@ -18,19 +18,14 @@ class PuzzleTest {
             column()
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        val solution = testSolveRecursively(puzzle)
 
         assertEquals("*.", solution.rows[0].cells.asString().replace('-', '.'))
         assertEquals("..", solution.rows[1].cells.asString().replace('-', '.'))
     }
 
     @Test
-    fun `solve 3x3 puzzle`() {
+    fun `solve 3x3 puzzle recursively`() {
         val puzzle = nonogram {
             row(1)
             row(1, 1)
@@ -41,16 +36,11 @@ class PuzzleTest {
             column(1)
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        testSolveRecursively(puzzle)
     }
 
     @Test
-    fun `solve 4x4 puzzle`() {
+    fun `solve 4x4 puzzle recursively`() {
         val puzzle = nonogram {
             row(1)
             row(3)
@@ -63,16 +53,11 @@ class PuzzleTest {
             column(3)
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        testSolveRecursively(puzzle)
     }
 
     @Test
-    fun `solve 5x5 puzzle`() {
+    fun `solve 5x5 puzzle recursively`() {
         val puzzle = nonogram {
             row(3)
             row(1, 1, 1)
@@ -87,17 +72,11 @@ class PuzzleTest {
             column(1, 1)
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        testSolveRecursively(puzzle)
     }
 
     @Test
-    @Disabled
-    fun `solve 20x10 puzzle`() {
+    fun `solve 20x10 puzzle with logic`() {
         val puzzle = nonogram {
             row(3, 3, 2)
             row(5, 3, 2)
@@ -136,17 +115,11 @@ class PuzzleTest {
             column(7)
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        testSolveWithLogic(puzzle)
     }
 
     @Test
-    @Disabled
-    fun `solve 15x15 puzzle`() {
+    fun `solve 15x15 puzzle with logic`() {
         // From  https://activityworkshop.net/puzzlesgames/nonograms/puzzle1.html
         val puzzle = nonogram {
             row(2, 1)
@@ -186,11 +159,28 @@ class PuzzleTest {
             column(3, 2)
         }
 
-        val solution = puzzle.solve() ?: throw AssertionFailedError("Puzzle should have a solution")
-
-        solution.print()
-
-        assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-        assertTrue(solution.isSolved(), "Puzzle should be solved.")
+        testSolveWithLogic(puzzle)
     }
+}
+
+private fun testSolveRecursively(puzzle: Puzzle): Puzzle {
+    val solution = puzzle.solveRecursively() ?: throw AssertionFailedError("Puzzle should have a solution")
+
+    solution.print()
+
+    assertTrue(solution.isValid(), "Puzzle should be in valid state.")
+    assertTrue(solution.isSolved(), "Puzzle should be solved.")
+
+    return solution
+}
+
+private fun testSolveWithLogic(puzzle: Puzzle): Puzzle {
+    val solution = puzzle.solveWithLogic(System.out) ?: throw AssertionFailedError("Puzzle should have a solution")
+
+    solution.print()
+
+    assertTrue(solution.isValid(), "Puzzle should be in valid state.")
+    assertTrue(solution.isSolved(), "Puzzle should be solved.")
+
+    return solution
 }

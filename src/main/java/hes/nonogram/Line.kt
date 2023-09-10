@@ -74,6 +74,28 @@ fun allSolutions(hints: List<Int>, size: Int): List<List<State>> {
     return all
 }
 
+fun Line.applyLogic(): Line {
+
+    // Get a partial solution by selecting all the positions that have the same state across all solutions
+    // that are possible given the current configuration.
+    val solution = possibleSolutions().reduce { result, next ->
+        result.zip(next) { current, newState ->
+            if (current == newState) current else UNKNOWN
+        }
+    }
+
+    // Apply the solution to the cells of this line
+    cells.zip(solution) { cell, state ->
+        cell.state = state
+    }
+
+    return this
+}
+
+//
+// Util
+//
+
 private val <T> List<T>.head: T
     get() = first()
 

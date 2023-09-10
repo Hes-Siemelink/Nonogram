@@ -152,4 +152,27 @@ class LineTest {
                 "*---*",
             ))
     }
+
+    @Test
+    fun `Possibilities for (1,3) with length 5 should have one solution`() {
+
+        val line = Line(".....", 1, 3)
+
+        val result = line.possibleSolutions()
+            .map { it.asString() }
+
+        assertThat(result).hasSize(1)
+        assertThat(result).containsExactlyInAnyOrderElementsOf(
+            listOf(
+                "*-***"
+            ))
+    }
+
+    @Test
+    fun `Apply logic to get partial solution`() {
+        assertThat(Line("...", 2).applyLogic().cells.asString()).isEqualTo(".*.")
+        assertThat(Line("-*.", 2).applyLogic().cells.asString()).isEqualTo("-**")
+        assertThat(Line("..-", 2).applyLogic().cells.asString()).isEqualTo("**-")
+        assertThat(Line("..-.-", 2).applyLogic().cells.asString()).isEqualTo("**---")
+    }
 }

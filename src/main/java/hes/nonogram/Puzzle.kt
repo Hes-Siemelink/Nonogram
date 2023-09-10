@@ -1,6 +1,7 @@
 package hes.nonogram
 
 import hes.nonogram.State.*
+import java.io.PrintStream
 
 class Puzzle(
     private val rowHints: List<List<Int>>,
@@ -15,7 +16,6 @@ class Puzzle(
     val columns: List<Line>
 
     init {
-
         if (cells.isEmpty() && cells is MutableList) {
             for (i in 1..width * height) {
                 cells.add(Cell())
@@ -52,7 +52,32 @@ class Puzzle(
         return Puzzle(rowHints, columnHints, cellsCopy)
     }
 
-    fun solve(): Puzzle? {
+    fun applyLogic(out: PrintStream? = null) {
+        rows.forEach { it.applyLogic() }
+        if (out != null) {
+            println("Applied logic on rows:\n$this\n")
+        }
+
+        columns.forEach { it.applyLogic() }
+        if (out != null) {
+            println("Applied logic on columns:\n$this\n")
+        }
+    }
+
+    fun solveWithLogic(out: PrintStream? = null): Puzzle? {
+
+        var previousState: Puzzle?
+
+        do {
+            previousState = copy()
+            applyLogic(out)
+        }
+        while (!isSolved() && this != previousState)
+
+        return if (isSolved()) this else null
+    }
+
+    fun solveRecursively(): Puzzle? {
 
         if (isSolved()) {
             return this
@@ -72,7 +97,7 @@ class Puzzle(
 
                 println("Checking with ($r, $c):\n$clone\n")
 
-                val solution = clone.solve()
+                val solution = clone.solveRecursively()
                 if (solution != null) {
                     return solution
                 }
