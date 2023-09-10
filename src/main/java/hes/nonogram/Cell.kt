@@ -30,6 +30,10 @@ enum class State(private val value: Char) {
 
     UNKNOWN('.'), EMPTY('-'), FILLED('*');
 
+    fun solves(other: State): Boolean {
+        return this == UNKNOWN || other == UNKNOWN || this == other
+    }
+
     override fun toString(): String {
         return value.toString()
     }

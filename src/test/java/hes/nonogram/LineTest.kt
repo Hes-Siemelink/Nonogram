@@ -1,6 +1,7 @@
 package hes.nonogram
 
 import hes.nonogram.State.FILLED
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -103,7 +104,7 @@ class LineTest {
 
     @Test
     fun `generate possibilities for (1) length 5`() {
-        val result = generate(listOf(1), 5).map { it.asString() }
+        val result = allSolutions(listOf(1), 5).map { it.asString() }
 
         result.forEach {
             println(it)
@@ -123,22 +124,32 @@ class LineTest {
 
     @Test
     fun `generate possibilities for (1,1) length 5`() {
-        val result = generate(listOf(1, 1), 5).map { it.asString() }
+        val result = allSolutions(listOf(1, 1), 5).map { it.asString() }
+
+        assertThat(result).containsExactlyInAnyOrderElementsOf(listOf(
+            "*-*--",
+            "*--*-",
+            "*---*",
+            "-*-*-",
+            "-*--*",
+            "--*-*"
+        ))
+    }
+
+    @Test
+    fun `generate possibilities for (1,1) length 5 with hints`() {
+
+        val line = Line(listOf(1, 1), "*....")
+        val result = line.possibileSolutions().map { it.asString() }
 
         result.forEach {
             println(it)
         }
 
-        assertIterableEquals(
-            listOf(
-                "*-*--",
-                "*--*-",
-                "*---*",
-                "-*-*-",
-                "-*--*",
-                "--*-*"
-            ),
-            result
-        )
+        assertThat(result).containsExactlyInAnyOrderElementsOf(listOf(
+            "*-*--",
+            "*--*-",
+            "*---*",
+        ))
     }
 }

@@ -34,13 +34,23 @@ class Line(val hints: List<Int>, val cells: List<Cell>) {
 
         return counted == hints
     }
+
+    fun possibileSolutions(): List<List<State>> {
+        val all = allSolutions(hints, cells.size)
+
+        return all.filter { this.isSolvedBy(it) }
+    }
+
+    private fun isSolvedBy(solution: List<State>): Boolean {
+        return cells.zip(solution).all { (current, solution) -> solution.solves(current.state) }
+    }
 }
 
 //
 // Generate possibilities
 //
 
-fun generate(hints: List<Int>, size: Int): List<List<State>> {
+fun allSolutions(hints: List<Int>, size: Int): List<List<State>> {
 
     val hint = hints.head
     val tail = hints.tail
@@ -53,7 +63,7 @@ fun generate(hints: List<Int>, size: Int): List<List<State>> {
             all.add(begin + EMPTY.times(size - begin.size))
         } else {
             val beginPlus = begin + listOf(EMPTY)
-            val rest = generate(tail, size - beginPlus.size)
+            val rest = allSolutions(tail, size - beginPlus.size)
             rest.forEach {
                 all.add(beginPlus + it)
             }
@@ -63,8 +73,9 @@ fun generate(hints: List<Int>, size: Int): List<List<State>> {
     return all
 }
 
-val <T> List<T>.head: T
+private val <T> List<T>.head: T
     get() = first()
 
-val <T> List<T>.tail: List<T>
+private val <T> List<T>.tail: List<T>
     get() = subList(1, size)
+
