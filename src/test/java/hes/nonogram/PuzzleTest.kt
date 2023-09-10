@@ -2,7 +2,6 @@ package hes.nonogram
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.opentest4j.AssertionFailedError
 
@@ -157,6 +156,85 @@ class PuzzleTest {
             column(3, 2, 2)
             column(1, 3)
             column(3, 2)
+        }
+
+        testSolveWithLogic(puzzle)
+    }
+
+    @Test
+    fun `solve 30x30 puzzle with logic`() {
+        val puzzle = nonogram {
+            row(11, 1, 8)
+            row(3, 8, 1, 8)
+            row(1, 10, 1, 1, 2, 3)
+            row(2, 2, 5, 1, 1, 2, 3)
+            row(1, 1, 3, 4, 11)
+
+            row(1, 1, 3, 1, 1)
+            row(1, 5, 10)
+            row(3, 3, 2, 1, 1, 2, 3)
+            row(5, 2, 1, 2, 1, 1, 1, 2, 3)
+            row(8, 2, 1, 1, 1, 2, 3)
+
+            row(4, 2, 2, 4, 1, 8)
+            row(3, 1, 2, 2, 1, 8)
+            row(2, 1, 1, 2, 1, 1, 2, 3)
+            row(1, 2, 2, 1, 1, 2, 3)
+            row(8, 8, 1, 2, 3)
+
+            row(2, 1, 1, 1, 2, 3)
+            row(9, 1, 8, 1, 2, 3)
+            row(1, 2, 4, 4, 2, 3, 1, 2, 3)
+            row(1, 2, 4, 1, 2, 2, 1, 2, 3)
+            row(1, 2, 2, 2, 3, 4, 2, 3)
+
+            row(1, 2, 2, 6, 4, 2, 2, 3)
+            row(1, 2, 2, 6, 4, 1, 2, 3)
+            row(1, 2, 2, 6, 2, 1, 2, 3)
+            row(15, 2, 2, 6)
+            row(3, 2, 1)
+
+            row(2, 1, 1)
+            row(13, 1, 12)
+            row(1, 2, 2, 2, 1, 2, 3, 2, 3)
+            row(1, 2, 2, 2, 1, 1, 2, 1, 2)
+            row(1, 2, 2, 7, 4, 3)
+
+            column(2, 10, 8, 4)
+            column(3, 6, 1, 1, 1, 1)
+            column(2, 5, 1, 8, 4)
+            column(1, 3, 3, 1, 8, 4)
+            column(4, 2, 1, 1, 1, 1)
+
+            column(3, 2, 1, 8, 4)
+            column(5, 6, 8, 4)
+            column(4, 2, 6, 1, 1)
+            column(3, 1, 9, 4)
+            column(3, 2, 5, 4)
+
+            column(5, 2, 2, 4, 1, 1)
+            column(4, 2, 3, 2, 5, 4)
+            column(2, 2, 7, 1, 1)
+            column(1, 6, 11, 3)
+            column(4, 7, 1, 1, 3, 1)
+
+            column(4, 3, 1, 3, 1, 2)
+            column(1, 5, 1, 3, 2, 1)
+            column(2, 1, 1, 2, 2, 1)
+            column(1, 2, 5, 2)
+            column(2, 1, 2, 2, 1, 3)
+
+            column(5, 12, 1, 1, 1)
+            column(1, 1, 2, 2, 1)
+            column(5, 13, 4, 1, 1)
+            column(2, 1, 1, 2, 1, 2)
+            column(5, 18, 4)
+
+            column(5, 18, 2, 1)
+            column(2, 1, 1, 2, 1, 1, 1)
+            column(5, 18, 2, 1)
+            column(5, 18, 4)
+            column(5, 24)
         }
 
         testSolveWithLogic(puzzle)
