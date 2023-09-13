@@ -71,8 +71,7 @@ class Puzzle(
         do {
             previousState = copy()
             applyLogic(out)
-        }
-        while (!isSolved() && this != previousState)
+        } while (!isSolved() && this != previousState)
 
         return if (isSolved()) this else null
     }
@@ -130,7 +129,7 @@ class Puzzle(
 
     fun print() {
         rows.forEach {
-            println(it.cells.asString().replace('.', ' ').replace('-', '·').replace('*', '█'))
+            println(it.cells.asString().replace(".", "  ").replace("-", "· ").replace("*", "██"))
         }
     }
 }
