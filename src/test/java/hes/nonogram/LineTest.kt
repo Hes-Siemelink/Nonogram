@@ -48,6 +48,7 @@ class LineTest {
 
     @Test
     fun `line validation for 1 hint`() {
+        assertTrue(Line("-", 0).isValid())
         assertTrue(Line(".", 1).isValid())
         assertTrue(Line("..", 1).isValid())
         assertTrue(Line("*.", 2).isValid())
@@ -86,6 +87,7 @@ class LineTest {
     fun `line solved`() {
         assertTrue(Line("*", 1).isSolved())
         assertTrue(Line("*-**.", 1, 2).isSolved())
+        assertTrue(Line("-", 0).isSolved())
 
         assertFalse(Line("*-.*.", 1, 2).isSolved())
         assertFalse(Line("*-***", 1, 2).isSolved())
@@ -118,7 +120,8 @@ class LineTest {
                 "--*--",
                 "---*-",
                 "----*"
-            ))
+            )
+        )
     }
 
     @Test
@@ -134,7 +137,8 @@ class LineTest {
                 "-*-*-",
                 "-*--*",
                 "--*-*"
-            ))
+            )
+        )
     }
 
     @Test
@@ -150,7 +154,8 @@ class LineTest {
                 "*-*--",
                 "*--*-",
                 "*---*",
-            ))
+            )
+        )
     }
 
     @Test
@@ -165,7 +170,8 @@ class LineTest {
         assertThat(result).containsExactlyInAnyOrderElementsOf(
             listOf(
                 "*-***"
-            ))
+            )
+        )
     }
 
     @Test

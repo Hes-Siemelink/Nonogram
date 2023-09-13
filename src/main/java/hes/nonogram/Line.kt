@@ -32,7 +32,7 @@ class Line(val cells: List<Cell>, val hints: List<Int>) {
             counted.add(count)
         }
 
-        return counted == hints
+        return counted == hints || (counted.isEmpty() && hints == listOf(0))
     }
 
     fun possibleSolutions(): List<List<State>> {

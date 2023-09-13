@@ -75,6 +75,25 @@ class PuzzleTest {
     }
 
     @Test
+    fun `solve puzzle with 0 in it`() {
+        val puzzle = nonogram {
+            row(1, 1, 1)
+            row(1, 1, 1)
+            row(3, 1)
+            row(1, 1, 1)
+            row(1, 1, 1)
+
+            column(5)
+            column(1)
+            column(5)
+            column(0)
+            column(5)
+        }
+
+        testSolveWithLogic(puzzle)
+    }
+
+    @Test
     fun `solve 20x10 puzzle with logic`() {
         val puzzle = nonogram {
             row(3, 3, 2)
@@ -239,7 +258,63 @@ class PuzzleTest {
 
         testSolveWithLogic(puzzle)
     }
+
+    @Test
+    fun `puzzle #99 form Sandra`() {
+        val puzzle = nonogram {
+            row(3, 3, 2, 3, 3)
+            row(1, 2, 4, 2, 1)
+            row(1, 3, 6, 3, 1)
+            row(3, 3, 3, 3)
+            row(8, 8)
+
+            row(2, 3, 2, 3, 2)
+            row(1, 3, 4, 3, 1)
+            row(3, 1, 2, 1, 3)
+            row(3, 2, 2, 3)
+            row(3, 3, 2, 3, 3)
+
+            row(3, 2, 3)
+            row(3, 3, 3, 3)
+            row(3, 6, 3)
+            row(1, 3, 1, 1, 3, 1)
+            row(2, 3, 2, 3, 2)
+
+            row(8, 8)
+            row(3, 3, 3, 3)
+            row(1, 3, 6, 3, 1)
+            row(1, 2, 4, 2, 1)
+            row(3, 3, 2, 3, 3)
+
+            column(3, 3, 2, 3, 3)
+            column(1, 2, 4, 2, 1)
+            column(1, 3, 6, 3, 1)
+            column(3, 3, 3, 3)
+            column(8, 8)
+
+            column(2, 3, 1, 3, 2)
+            column(1, 3, 2, 1, 3, 1)
+            column(3, 3, 2, 3)
+            column(3, 1, 3, 3)
+            column(3, 3, 2, 1, 1, 3)
+
+            column(3, 3, 2, 1, 1, 3)
+            column(3, 1, 3, 3)
+            column(3, 3, 2, 3)
+            column(1, 3, 2, 1, 3, 1)
+            column(2, 3, 1, 3, 2)
+
+            column(8, 8)
+            column(3, 3, 3, 3)
+            column(1, 3, 6, 3, 1)
+            column(1, 2, 4, 2, 1)
+            column(3, 3, 2, 3, 3)
+        }
+
+        testSolveWithLogic(puzzle)
+    }
 }
+
 
 private fun testSolveRecursively(puzzle: Puzzle): Puzzle {
     val solution = puzzle.solveRecursively() ?: throw AssertionFailedError("Puzzle should have a solution")

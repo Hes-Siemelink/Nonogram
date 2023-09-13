@@ -1,13 +1,24 @@
 package hes.nonogram
 
 fun Line.isValid(): Boolean {
-    if (filled() > hints.sumOf { it }) {
-        return false
+
+    // Special case: hint is 0 and all cells are empty
+    if (hints.size == 1 && hints[0] == 0 && cells.all { it.state == State.EMPTY }) {
+        return true;
     }
-    if (!knownHintsOK()) {
+
+    // Not valid if there are more cells filled in than the total of the hints
+    if (filledCount() > hints.sumOf { it }) {
         return false
     }
 
+    // Check if the cells that are filled in from the left (or top) until the first unknown cell are
+    // consistent with the first hints
+    if (!knownCellsFromLeftConsistentWithHints()) {
+        return false
+    }
+
+    // Check the segment that each hint can logically be in
     for (i in hints.indices) {
         val hint = hints[i]
         var left = lengthOf(hints.subList(0, i)) + emptyLeft()
@@ -37,11 +48,11 @@ fun Line.isValid(): Boolean {
     return true
 }
 
-private fun Line.filled(): Int {
+private fun Line.filledCount(): Int {
     return cells.count { it.state == State.FILLED }
 }
 
-private fun Line.knownHintsOK(): Boolean {
+private fun Line.knownCellsFromLeftConsistentWithHints(): Boolean {
 
     val filled = splitFilled()
     if (filled.size <= hints.size) {
