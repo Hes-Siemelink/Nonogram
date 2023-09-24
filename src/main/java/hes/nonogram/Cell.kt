@@ -1,6 +1,6 @@
 package hes.nonogram
 
-class Cell(var state: State = State.UNKNOWN) {
+data class Cell(var state: State = State.UNKNOWN) {
 
     constructor(char: Char) : this(State.from(char))
 
@@ -24,6 +24,7 @@ class Cell(var state: State = State.UNKNOWN) {
             return cells
         }
     }
+
 }
 
 enum class State(private val value: Char) {

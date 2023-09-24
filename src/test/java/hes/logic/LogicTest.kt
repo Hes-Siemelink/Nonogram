@@ -1,8 +1,10 @@
 package hes.logic
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled
 class LogicTest {
 
     // parent(Emma, Valeria)

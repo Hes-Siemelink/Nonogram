@@ -3,7 +3,12 @@ package hes.nonogram
 import hes.nonogram.State.*
 import java.io.PrintStream
 
-class Puzzle(
+/**
+ * Nonogram puzzle state.
+ *
+ * Cells are mutable; hints are read-only.
+ */
+data class Puzzle(
     private val rowHints: List<List<Int>>,
     private val columnHints: List<List<Int>>,
     private val cells: List<Cell> = mutableListOf()
@@ -16,6 +21,7 @@ class Puzzle(
     val columns: List<Line>
 
     init {
+        // Initialize with empty cells if we are not copying
         if (cells.isEmpty() && cells is MutableList) {
             for (i in 1..width * height) {
                 cells.add(Cell())
