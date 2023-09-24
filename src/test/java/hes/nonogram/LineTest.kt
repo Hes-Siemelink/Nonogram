@@ -146,7 +146,7 @@ class LineTest {
 
         val line = Line("*....", 1, 1)
 
-        val result = line.possibleSolutions()
+        val result = possibleSolutions(line)
             .map { it.asString() }
 
         assertThat(result).containsExactlyInAnyOrderElementsOf(
@@ -163,7 +163,7 @@ class LineTest {
 
         val line = Line(".....", 1, 3)
 
-        val result = line.possibleSolutions()
+        val result = possibleSolutions(line)
             .map { it.asString() }
 
         assertThat(result).hasSize(1)
@@ -176,9 +176,19 @@ class LineTest {
 
     @Test
     fun `Apply logic to get partial solution`() {
-        assertThat(Line("...", 2).applyLogic().cells.asString()).isEqualTo(".*.")
-        assertThat(Line("-*.", 2).applyLogic().cells.asString()).isEqualTo("-**")
-        assertThat(Line("..-", 2).applyLogic().cells.asString()).isEqualTo("**-")
-        assertThat(Line("..-.-", 2).applyLogic().cells.asString()).isEqualTo("**---")
+        val solver = BasicSolver()
+
+        testApplyLogic(Line("...", 2), ".*.")
+        testApplyLogic(Line("-*.", 2), "-**")
+        testApplyLogic(Line("..-", 2), "**-")
+        testApplyLogic(Line("..-.-", 2), "**---")
+    }
+
+    private fun testApplyLogic(line: Line, result: String) {
+        val solver = BasicSolver()
+
+        solver.applyLogic(line)
+
+        assertThat(line.cells.asString()).isEqualTo(result)
     }
 }

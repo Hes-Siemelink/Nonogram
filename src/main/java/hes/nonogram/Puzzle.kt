@@ -59,12 +59,14 @@ data class Puzzle(
     }
 
     fun applyLogic(out: PrintStream? = null) {
-        rows.forEach { it.applyLogic() }
+        val solver = BasicSolver()
+
+        rows.forEach { solver.applyLogic(it) }
         if (out != null) {
             println("Applied logic on rows:\n$this\n")
         }
 
-        columns.forEach { it.applyLogic() }
+        columns.forEach { solver.applyLogic(it) }
         if (out != null) {
             println("Applied logic on columns:\n$this\n")
         }
