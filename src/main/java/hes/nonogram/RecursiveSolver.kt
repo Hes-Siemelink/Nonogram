@@ -1,5 +1,42 @@
 package hes.nonogram
 
+class RecursiveSolver : PuzzleSolver {
+
+    override fun solve(puzzle: Puzzle): Puzzle? {
+
+        if (puzzle.isSolved()) {
+            return puzzle
+        }
+
+        for (r in puzzle.rows.indices) {
+            for (c in puzzle.rows[r].cells.indices) {
+                if (puzzle.rows[r].cells[c].state != State.UNKNOWN) continue
+
+                val candidate = puzzle.copy()
+                candidate.rows[r].cells[c].state = State.FILLED
+
+                if (!candidate.isValid()) {
+                    puzzle.rows[r].cells[c].state = State.EMPTY
+                    continue
+                }
+
+                println("Checking with ($r, $c):\n$candidate\n")
+
+                val solution = solve(candidate)
+                if (solution != null) {
+                    return solution
+                }
+
+                puzzle.rows[r].cells[c].state = State.EMPTY
+            }
+        }
+
+        return null
+    }
+}
+
+fun Puzzle.isValid(): Boolean = rows.all { it.isValid() } && columns.all { it.isValid() }
+
 fun Line.isValid(): Boolean {
 
     // Special case: hint is 0 and all cells are empty

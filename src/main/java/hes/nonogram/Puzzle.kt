@@ -1,8 +1,5 @@
 package hes.nonogram
 
-import hes.nonogram.State.*
-import java.io.PrintStream
-
 /**
  * Nonogram puzzle state.
  *
@@ -48,72 +45,12 @@ data class Puzzle(
         return rows[row].cells[column]
     }
 
-    fun isValid(): Boolean = rows.all { it.isValid() } && columns.all { it.isValid() }
-
     fun isSolved(): Boolean = rows.all { it.isSolved() } && columns.all { it.isSolved() }
 
     fun copy(): Puzzle {
         val cellsCopy = cells.map { it.copy() }
 
         return Puzzle(rowHints, columnHints, cellsCopy)
-    }
-
-    fun applyLogic(out: PrintStream? = null) {
-        val solver = BasicSolver()
-
-        rows.forEach { solver.applyLogic(it) }
-        if (out != null) {
-            println("Applied logic on rows:\n$this\n")
-        }
-
-        columns.forEach { solver.applyLogic(it) }
-        if (out != null) {
-            println("Applied logic on columns:\n$this\n")
-        }
-    }
-
-    fun solveWithLogic(out: PrintStream? = null): Puzzle? {
-
-        var previousState: Puzzle?
-
-        do {
-            previousState = copy()
-            applyLogic(out)
-        } while (!isSolved() && this != previousState)
-
-        return if (isSolved()) this else null
-    }
-
-    fun solveRecursively(): Puzzle? {
-
-        if (isSolved()) {
-            return this
-        }
-
-        for (r in rows.indices) {
-            for (c in rows[r].cells.indices) {
-                if (rows[r].cells[c].state != UNKNOWN) continue
-
-                val clone = copy()
-                clone.rows[r].cells[c].state = FILLED
-
-                if (!clone.isValid()) {
-                    this.rows[r].cells[c].state = EMPTY
-                    continue
-                }
-
-                println("Checking with ($r, $c):\n$clone\n")
-
-                val solution = clone.solveRecursively()
-                if (solution != null) {
-                    return solution
-                }
-
-                this.rows[r].cells[c].state = EMPTY
-            }
-        }
-
-        return null
     }
 
     override fun toString(): String {
@@ -142,7 +79,7 @@ data class Puzzle(
     }
 }
 
-class NonogramSpec(
+class Hints(
     val rowHints: MutableList<List<Int>> = mutableListOf(),
     val columnHints: MutableList<List<Int>> = mutableListOf()
 ) {
@@ -159,9 +96,12 @@ class NonogramSpec(
     }
 }
 
-fun nonogram(init: NonogramSpec.() -> Unit): Puzzle {
-    val spec = NonogramSpec()
-    spec.init()
+fun nonogram(init: Hints.() -> Unit): Puzzle {
+    val hints = Hints()
+    hints.init()
+    return hints.toPuzzle(hints.rowHints, hints.columnHints)
+}
 
-    return spec.toPuzzle(spec.rowHints, spec.columnHints)
+interface PuzzleSolver {
+    fun solve(puzzle: Puzzle): Puzzle?
 }

@@ -18,7 +18,7 @@ class PuzzleTest {
             column()
         }
 
-        val solution = testSolveRecursively(puzzle)
+        val solution = testSolve(puzzle, RecursiveSolver())
 
         assertEquals("*.", solution.rows[0].cells.asString().replace('-', '.'))
         assertEquals("..", solution.rows[1].cells.asString().replace('-', '.'))
@@ -36,7 +36,7 @@ class PuzzleTest {
             column(1)
         }
 
-        testSolveRecursively(puzzle)
+        testSolve(puzzle, RecursiveSolver())
     }
 
     @Test
@@ -53,7 +53,7 @@ class PuzzleTest {
             column(3)
         }
 
-        testSolveRecursively(puzzle)
+        testSolve(puzzle, RecursiveSolver())
     }
 
     @Test
@@ -72,7 +72,7 @@ class PuzzleTest {
             column(1, 1)
         }
 
-        testSolveRecursively(puzzle)
+        testSolve(puzzle, RecursiveSolver())
     }
 
     @Test
@@ -91,7 +91,7 @@ class PuzzleTest {
             column(5)
         }
 
-        testSolveWithLogic(puzzle)
+        testSolve(puzzle, LogicSolver())
     }
 
     @Test
@@ -134,7 +134,7 @@ class PuzzleTest {
             column(7)
         }
 
-        testSolveWithLogic(puzzle)
+        testSolve(puzzle, LogicSolver())
     }
 
     @Test
@@ -178,7 +178,7 @@ class PuzzleTest {
             column(3, 2)
         }
 
-        testSolveWithLogic(puzzle)
+        testSolve(puzzle, LogicSolver())
     }
 
     @Test
@@ -258,7 +258,7 @@ class PuzzleTest {
             column(5, 24)
         }
 
-        testSolveWithLogic(puzzle)
+        testSolve(puzzle, LogicSolver())
     }
 
     @Test
@@ -313,25 +313,14 @@ class PuzzleTest {
             column(3, 3, 2, 3, 3)
         }
 
-        testSolveWithLogic(puzzle)
+        testSolve(puzzle, LogicSolver())
     }
 }
 
 
-private fun testSolveRecursively(puzzle: Puzzle): Puzzle {
-    val solution = puzzle.solveRecursively() ?: throw AssertionFailedError("Puzzle should have a solution")
+private fun testSolve(puzzle: Puzzle, solver: PuzzleSolver): Puzzle {
 
-    solution.print()
-
-    assertTrue(solution.isValid(), "Puzzle should be in valid state.")
-    assertTrue(solution.isSolved(), "Puzzle should be solved.")
-
-    return solution
-}
-
-private fun testSolveWithLogic(puzzle: Puzzle): Puzzle {
-    val solution = puzzle.solveWithLogic(System.out) ?: throw AssertionFailedError("Puzzle should have a solution")
-
+    val solution = solver.solve(puzzle) ?: throw AssertionFailedError("Puzzle should have a solution")
     solution.print()
 
     assertTrue(solution.isValid(), "Puzzle should be in valid state.")

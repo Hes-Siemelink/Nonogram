@@ -1,5 +1,35 @@
 package hes.nonogram
 
+class LogicSolver(private val lineSolver: LineSolver = BasicSolver()) : PuzzleSolver {
+
+    val log by logger()
+
+    override fun solve(puzzle: Puzzle): Puzzle? {
+
+        var previousState: Puzzle?
+
+        do {
+            previousState = puzzle.copy()
+            applyLogic(puzzle)
+        } while (!puzzle.isSolved() && puzzle != previousState)
+
+        return if (puzzle.isSolved()) puzzle else null
+    }
+
+    private fun applyLogic(puzzle: Puzzle) {
+
+        puzzle.rows.forEach { lineSolver.applyLogic(it) }
+        log.info { "Applied logic on rows:\n$puzzle\n" }
+
+        puzzle.columns.forEach { lineSolver.applyLogic(it) }
+        log.info { "Applied logic on columns:\n$puzzle\n" }
+    }
+}
+
+//
+// Lines
+//
+
 interface LineSolver {
     fun applyLogic(line: Line)
 }
