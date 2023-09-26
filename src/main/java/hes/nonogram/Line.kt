@@ -3,7 +3,7 @@ package hes.nonogram
 import hes.nonogram.Cell.Companion.from
 import hes.nonogram.State.FILLED
 
-class Line(val cells: List<Cell>, val hints: List<Int>) {
+class Line(val cells: List<Cell>, val hints: Hints) {
 
     constructor(cells: String, vararg hints: Int) : this(from(cells), hints.toList())
 

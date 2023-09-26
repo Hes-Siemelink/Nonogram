@@ -6,8 +6,8 @@ package hes.nonogram
  * Cells are mutable; hints are read-only.
  */
 data class Puzzle(
-    private val rowHints: List<List<Int>>,
-    private val columnHints: List<List<Int>>,
+    private val rowHints: List<Hints>,
+    private val columnHints: List<Hints>,
     private val cells: List<Cell> = mutableListOf()
 ) {
 
@@ -79,9 +79,11 @@ data class Puzzle(
     }
 }
 
-class Hints(
-    val rowHints: MutableList<List<Int>> = mutableListOf(),
-    val columnHints: MutableList<List<Int>> = mutableListOf()
+typealias Hints = List<Int>
+
+class PuzzleSpec(
+    val rowHints: MutableList<Hints> = mutableListOf(),
+    val columnHints: MutableList<Hints> = mutableListOf()
 ) {
     fun row(vararg hints: Int) {
         rowHints.add(hints.asList())
@@ -91,17 +93,17 @@ class Hints(
         columnHints.add(hints.asList())
     }
 
-    fun toPuzzle(rowHints: List<List<Int>>, columnHints: List<List<Int>>): Puzzle {
+    fun toPuzzle(rowHints: List<Hints>, columnHints: List<Hints>): Puzzle {
         return Puzzle(rowHints, columnHints)
     }
 }
 
-fun nonogram(init: Hints.() -> Unit): Puzzle {
-    val hints = Hints()
-    hints.init()
-    return hints.toPuzzle(hints.rowHints, hints.columnHints)
+fun nonogram(init: PuzzleSpec.() -> Unit): Puzzle {
+    val spec = PuzzleSpec()
+    spec.init()
+    return spec.toPuzzle(spec.rowHints, spec.columnHints)
 }
 
-interface PuzzleSolver {
+fun interface PuzzleSolver {
     fun solve(puzzle: Puzzle): Puzzle?
 }

@@ -1,5 +1,8 @@
 package hes.nonogram
 
+import hes.nonogram.State.EMPTY
+import hes.nonogram.State.FILLED
+
 class RecursiveSolver : PuzzleSolver {
 
     override fun solve(puzzle: Puzzle): Puzzle? {
@@ -13,10 +16,10 @@ class RecursiveSolver : PuzzleSolver {
                 if (puzzle.rows[r].cells[c].state != State.UNKNOWN) continue
 
                 val candidate = puzzle.copy()
-                candidate.rows[r].cells[c].state = State.FILLED
+                candidate.rows[r].cells[c].state = FILLED
 
                 if (!candidate.isValid()) {
-                    puzzle.rows[r].cells[c].state = State.EMPTY
+                    puzzle.rows[r].cells[c].state = EMPTY
                     continue
                 }
 
@@ -27,7 +30,7 @@ class RecursiveSolver : PuzzleSolver {
                     return solution
                 }
 
-                puzzle.rows[r].cells[c].state = State.EMPTY
+                puzzle.rows[r].cells[c].state = EMPTY
             }
         }
 
@@ -40,12 +43,12 @@ fun Puzzle.isValid(): Boolean = rows.all { it.isValid() } && columns.all { it.is
 fun Line.isValid(): Boolean {
 
     // Special case: hint is 0 and all cells are empty
-    if (hints.size == 1 && hints[0] == 0 && cells.all { it.state == State.EMPTY }) {
+    if (hints.size == 1 && hints[0] == 0 && cells.all(EMPTY)) {
         return true;
     }
 
     // Not valid if there are more cells filled in than the total of the hints
-    if (filledCount() > hints.sumOf { it }) {
+    if (cells.count(FILLED) > hints.total()) {
         return false
     }
 
@@ -58,11 +61,11 @@ fun Line.isValid(): Boolean {
     // Check the segment that each hint can logically be in
     for (i in hints.indices) {
         val hint = hints[i]
-        var left = lengthOf(hints.subList(0, i)) + emptyLeft()
-        val right = lengthOf(hints.subList(i + 1, hints.size)) + emptyRight()
+        var left = hints.subList(0, i).minimumLength() + emptyLeft()
+        val right = hints.subList(i + 1, hints.size).minimumLength() + emptyRight()
 
         // Hack to detect cases like .*. with [1, 1]
-        if (left > 0 && cells[left - 1].state == State.FILLED) {
+        if (left > 0 && cells[left - 1].state == FILLED) {
             left += 1
         }
 
@@ -85,9 +88,8 @@ fun Line.isValid(): Boolean {
     return true
 }
 
-private fun Line.filledCount(): Int {
-    return cells.count { it.state == State.FILLED }
-}
+private fun List<Cell>.count(state: State): Int = this.count { it.state == state }
+private fun List<Cell>.all(state: State): Boolean = this.all { it.state == state }
 
 private fun Line.knownCellsFromLeftConsistentWithHints(): Boolean {
 
@@ -102,13 +104,13 @@ private fun Line.splitFilled(): List<Int> {
     val filled = mutableListOf<Int>()
     var count = 0
     for (cell in cells) {
-        if (cell.state == State.EMPTY) {
+        if (cell.state == EMPTY) {
             if (count > 0) {
                 filled.add(count)
             }
             count = 0
         }
-        if (cell.state == State.FILLED) {
+        if (cell.state == FILLED) {
             count++
         }
         if (cell.state == State.UNKNOWN) {
@@ -124,7 +126,7 @@ private fun Line.splitFilled(): List<Int> {
 private fun Line.emptyLeft(): Int {
     var total = 0
     for (cell in cells) {
-        if (cell.state != State.EMPTY) {
+        if (cell.state != EMPTY) {
             return total
         }
         total++
@@ -135,7 +137,7 @@ private fun Line.emptyLeft(): Int {
 private fun Line.emptyRight(): Int {
     var total = 0
     for (cell in cells.reversed()) {
-        if (cell.state != State.EMPTY) {
+        if (cell.state != EMPTY) {
             return total
         }
         total++
@@ -143,9 +145,11 @@ private fun Line.emptyRight(): Int {
     return total
 }
 
-fun lengthOf(hints: List<Int>): Int {
+fun Hints.total(): Int = this.sumOf { it }
+
+fun Hints.minimumLength(): Int {
     var total = 0
-    for (hint in hints) {
+    for (hint in this) {
         total += hint + 1
     }
     return total
@@ -167,17 +171,17 @@ class LineSegment(val cells: List<Cell>, val hint: Int) {
 
     private fun isValidAt(position: Int): Boolean {
         for (i in position until position + hint) {
-            if (cells[i].state == State.EMPTY) {
+            if (cells[i].state == EMPTY) {
                 return false
             }
         }
 
-        if (position > 0 && cells[position - 1].state == State.FILLED) {
+        if (position > 0 && cells[position - 1].state == FILLED) {
             return false
         }
 
         // ..* position 1 hint 1
-        if (position + hint < cells.size && cells[position + hint].state == State.FILLED) {
+        if (position + hint < cells.size && cells[position + hint].state == FILLED) {
             return false
         }
 
