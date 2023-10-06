@@ -61,22 +61,28 @@ fun possibleSolutions(line: Line): List<List<State>> {
 fun allSolutions(hints: Hints, length: Int): List<List<State>> {
 
     val hint = hints.head
-    val tail = hints.tail
+    val restOfHints = hints.tail
 
     val all = mutableListOf<List<State>>()
     for (i in 0..length - hint) {
         val begin = State.EMPTY.times(i) + State.FILLED.times(hint)
 
-        if (tail.isEmpty()) {
+        if (restOfHints.isEmpty()) {
             all.add(begin + State.EMPTY.times(length - begin.size))
         } else {
             val beginPlus = begin + listOf(State.EMPTY)
-            val rest = allSolutions(tail, length - beginPlus.size)
+            val rest = allSolutions(restOfHints, length - beginPlus.size)
             rest.forEach {
                 all.add(beginPlus + it)
             }
         }
     }
+
+    return all
+}
+
+fun Line.allSolutions(position: Int = 0): List<List<State>> {
+    val all = mutableListOf<List<State>>()
 
     return all
 }

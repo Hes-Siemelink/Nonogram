@@ -43,7 +43,7 @@ fun Puzzle.isValid(): Boolean = rows.all { it.isValid() } && columns.all { it.is
 fun Line.isValid(): Boolean {
 
     // Special case: hint is 0 and all cells are empty
-    if (hints.size == 1 && hints[0] == 0 && cells.all(EMPTY)) {
+    if (hints == listOf(0) && cells.all(EMPTY)) {
         return true;
     }
 
