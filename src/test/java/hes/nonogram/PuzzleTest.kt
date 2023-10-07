@@ -4,13 +4,18 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.opentest4j.AssertionFailedError
 
 @ExtendWith(TestTimer::class)
 class PuzzleTest {
 
-    @Test
-    fun `solve simple puzzle recursively`() {
+    @ParameterizedTest
+    @ValueSource(classes = [LogicSolver::class, RecursiveSolver::class])
+    fun `Solve simple puzzle`(solverClass: Class<PuzzleSolver>) {
+        val solver = solverClass.getDeclaredConstructor().newInstance()
+
         val puzzle = nonogram {
             row(1)
             row()
@@ -19,14 +24,16 @@ class PuzzleTest {
             column()
         }
 
-        val solution = testSolve(puzzle, RecursiveSolver())
+        val solution = testSolve(puzzle, solver)
 
         assertEquals("*.", solution.rows[0].cells.asString().replace('-', '.'))
         assertEquals("..", solution.rows[1].cells.asString().replace('-', '.'))
     }
 
-    @Test
-    fun `solve 3x3 puzzle recursively`() {
+    @ParameterizedTest
+    @ValueSource(classes = [LogicSolver::class, RecursiveSolver::class])
+    fun `Solve 3x3 puzzle`(solverClass: Class<PuzzleSolver>) {
+        val solver = solverClass.getDeclaredConstructor().newInstance()
         val puzzle = nonogram {
             row(1)
             row(1, 1)
@@ -37,11 +44,11 @@ class PuzzleTest {
             column(1)
         }
 
-        testSolve(puzzle, RecursiveSolver())
+        testSolve(puzzle, solver)
     }
 
     @Test
-    fun `solve 4x4 puzzle recursively`() {
+    fun `Solve 4x4 puzzle recursively`() {
         val puzzle = nonogram {
             row(1)
             row(3)
@@ -55,10 +62,15 @@ class PuzzleTest {
         }
 
         testSolve(puzzle, RecursiveSolver())
+
+        // This puzzle has multiple solutions so logic solver won't find a solution.
     }
 
-    @Test
-    fun `solve 5x5 puzzle recursively`() {
+    @ParameterizedTest
+    @ValueSource(classes = [LogicSolver::class, RecursiveSolver::class])
+    fun `Solve 5x5 puzzle`(solverClass: Class<PuzzleSolver>) {
+        val solver = solverClass.getDeclaredConstructor().newInstance()
+
         val puzzle = nonogram {
             row(3)
             row(1, 1, 1)
@@ -73,11 +85,13 @@ class PuzzleTest {
             column(1, 1)
         }
 
-        testSolve(puzzle, RecursiveSolver())
+        testSolve(puzzle, solver)
     }
 
-    @Test
-    fun `solve puzzle with 0 in it`() {
+    @ParameterizedTest
+    @ValueSource(classes = [LogicSolver::class, RecursiveSolver::class])
+    fun `Solve puzzle with hint = 0 in it`(solverClass: Class<PuzzleSolver>) {
+        val solver = solverClass.getDeclaredConstructor().newInstance()
         val puzzle = nonogram {
             row(1, 1, 1)
             row(1, 1, 1)
@@ -96,7 +110,7 @@ class PuzzleTest {
     }
 
     @Test
-    fun `solve 20x10 puzzle with logic`() {
+    fun `Solve 20x10 puzzle with logic`() {
         val puzzle = nonogram {
             row(3, 3, 2)
             row(5, 3, 2)
@@ -139,7 +153,7 @@ class PuzzleTest {
     }
 
     @Test
-    fun `solve 15x15 puzzle with logic`() {
+    fun `Solve 15x15 puzzle with logic`() {
         // From  https://activityworkshop.net/puzzlesgames/nonograms/puzzle1.html
         val puzzle = nonogram {
             row(2, 1)
@@ -183,8 +197,7 @@ class PuzzleTest {
     }
 
     @Test
-//    @Disabled // Takes too long
-    fun `solve 30x30 puzzle with logic`() {
+    fun `Solve 30x30 puzzle with logic`() {
         val puzzle = nonogram {
             row(11, 1, 8)
             row(3, 8, 1, 8)
@@ -263,7 +276,7 @@ class PuzzleTest {
     }
 
     @Test
-    fun `puzzle #99 form Sandra`() {
+    fun `Puzzle #99 form Sandra`() {
         val puzzle = nonogram {
             row(3, 3, 2, 3, 3)
             row(1, 2, 4, 2, 1)
@@ -317,7 +330,6 @@ class PuzzleTest {
         testSolve(puzzle, LogicSolver())
     }
 }
-
 
 private fun testSolve(puzzle: Puzzle, solver: PuzzleSolver): Puzzle {
 

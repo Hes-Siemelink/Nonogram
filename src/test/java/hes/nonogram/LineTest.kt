@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class LineTest {
 
     @Test
-    fun `string representation`() {
+    fun `String representation`() {
         val cells = Cell.from(".-*")
 
         assertEquals(3, cells.size)
@@ -20,7 +20,7 @@ class LineTest {
     }
 
     @Test
-    fun `segment validation with hint of size 1`() {
+    fun `Segment validation with hint of size 1`() {
         assertTrue(LineSegment(".", 1).isValid())
         assertTrue(LineSegment("..", 1).isValid())
         assertTrue(LineSegment("*.", 1).isValid())
@@ -34,7 +34,7 @@ class LineTest {
     }
 
     @Test
-    fun `segment validation with hint of size 2`() {
+    fun `Segment validation with hint of size 2`() {
         assertTrue(LineSegment("..", 2).isValid())
         assertTrue(LineSegment("*.", 2).isValid())
         assertTrue(LineSegment(".*", 2).isValid())
@@ -47,7 +47,7 @@ class LineTest {
     }
 
     @Test
-    fun `line validation for 1 hint`() {
+    fun `Line validation for 1 hint`() {
         assertTrue(Line("-", 0).isValid())
         assertTrue(Line(".", 1).isValid())
         assertTrue(Line("..", 1).isValid())
@@ -58,7 +58,7 @@ class LineTest {
     }
 
     @Test
-    fun `line validation for 2 hints`() {
+    fun `Line validation for 2 hints`() {
         assertTrue(Line("...", 1, 1).isValid())
         assertTrue(Line("*.*", 1, 1).isValid())
         assertTrue(Line("..*.*", 1, 3).isValid())
@@ -77,14 +77,14 @@ class LineTest {
     }
 
     @Test
-    fun `line validation for 3 hints`() {
+    fun `Line validation for 3 hints`() {
         assertTrue(Line(".....", 1, 1, 1).isValid())
 
         assertFalse(Line("**....-.", 2, 2, 2).isValid())
     }
 
     @Test
-    fun `line solved`() {
+    fun `Line solved`() {
         assertTrue(Line("*", 1).isSolved())
         assertTrue(Line("*-**.", 1, 2).isSolved())
         assertTrue(Line("-", 0).isSolved())
@@ -95,7 +95,7 @@ class LineTest {
     }
 
     @Test
-    fun `copy line`() {
+    fun `Copy line`() {
         val line = Line("...", 1)
 
         val copy = line.copy()
@@ -106,7 +106,7 @@ class LineTest {
     }
 
     @Test
-    fun `generate possibilities for (1) length 5`() {
+    fun `Generate possibilities for (1) length 5`() {
         val result = allSolutions(listOf(1), 5)
             .map { it.asString() }
 
@@ -126,7 +126,7 @@ class LineTest {
     }
 
     @Test
-    fun `generate possibilities for (1,1) length 5`() {
+    fun `Generate possibilities for (1,1) length 5`() {
         val result = allSolutions(listOf(1, 1), 5)
             .map { it.asString() }
 
@@ -143,7 +143,7 @@ class LineTest {
     }
 
     @Test
-    fun `generate possibilities for (1,1) length 5 given a partial solution`() {
+    fun `Generate possibilities for (1,1) length 5 given a partial solution`() {
 
         val line = Line("*....", 1, 1)
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class PuzzleImplementationTest {
 
     @Test
-    fun `create new puzzle`() {
+    fun `Create new puzzle`() {
 
         val puzzle = simplePuzzle()
 
@@ -18,7 +18,7 @@ class PuzzleImplementationTest {
     }
 
     @Test
-    fun `rows and columns`() {
+    fun `Rows and columns`() {
 
         val puzzle = simplePuzzle()
 
@@ -40,7 +40,7 @@ class PuzzleImplementationTest {
     }
 
     @Test
-    fun `test valid and solved`() {
+    fun `Test valid and solved`() {
 
         val puzzle = simplePuzzle()
 
@@ -55,7 +55,7 @@ class PuzzleImplementationTest {
 
 
     @Test
-    fun `copy`() {
+    fun `Copy`() {
         val puzzle = simplePuzzle()
 
         assertEquals(2, puzzle.rows.size)
@@ -70,14 +70,14 @@ class PuzzleImplementationTest {
         assertEquals("*.", copy.rows[0].cells.asString())
         assertEquals("..", puzzle.rows[0].cells.asString())
     }
+}
 
-    private fun simplePuzzle(): Puzzle {
-        return nonogram {
-            row(1)
-            row()
+private fun simplePuzzle(): Puzzle {
+    return nonogram {
+        row(1)
+        row()
 
-            column(1)
-            column()
-        }
+        column(1)
+        column()
     }
 }
