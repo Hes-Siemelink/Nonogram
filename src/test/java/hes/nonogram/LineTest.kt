@@ -91,6 +91,7 @@ class LineTest {
 
         assertFalse(Line("*-.*.", 1, 2).isSolved())
         assertFalse(Line("*-***", 1, 2).isSolved())
+        assertFalse(Line("-------.****.--", 5).isSolved())
     }
 
     @Test
@@ -176,7 +177,6 @@ class LineTest {
 
     @Test
     fun `Apply logic to get partial solution`() {
-        val solver = BasicSolver()
 
         testApplyLogic(Line("...", 2), ".*.")
         testApplyLogic(Line("-*.", 2), "-**")
@@ -185,9 +185,7 @@ class LineTest {
     }
 
     private fun testApplyLogic(line: Line, result: String) {
-        val solver = BasicSolver()
-
-        solver.applyLogic(line)
+        line.applyLogic()
 
         assertThat(line.cells.asString()).isEqualTo(result)
     }

@@ -1,8 +1,10 @@
 package hes.nonogram
 
+import hes.nonogram.State.EMPTY
+import hes.nonogram.State.UNKNOWN
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class LogicSolver(private val lineSolver: LineSolver = BasicSolver()) : PuzzleSolver {
+class LogicSolver() : PuzzleSolver {
 
     private val log = KotlinLogging.logger {}
 
@@ -23,10 +25,10 @@ class LogicSolver(private val lineSolver: LineSolver = BasicSolver()) : PuzzleSo
         (puzzle.rows + puzzle.columns)
             .sortedBy { it.score() }
             .forEach {
-                lineSolver.applyLogic(it)
+                it.applyLogic()
             }
-        log.info { "Applied logic on rows and columns:\n$puzzle\n" }
 
+        log.info { "Applied logic on rows and columns:\n$puzzle\n" }
     }
 }
 
@@ -38,26 +40,38 @@ fun Line.score(): Int {
     return cells.size - hints.sum() - hints.size + 1
 }
 
-interface LineSolver {
-    fun applyLogic(line: Line)
-}
-
-class BasicSolver : LineSolver {
-    override fun applyLogic(line: Line) {
-        // Get a partial solution by selecting all the positions that have the same state across all solutions
-        // that are possible given the current configuration.
-        val solution = possibleSolutions(line).reduce { result, next ->
-            result.zip(next) { current, newState ->
-                if (current == newState) current else State.UNKNOWN
+fun Line.checkSolved(): Boolean {
+    if (this.isSolved()) {
+        cells.forEach {
+            if (it.state == UNKNOWN) {
+                it.state = EMPTY
             }
         }
+        return true
+    }
+    return false
+}
 
-        // Apply the solution to the cells of this line
-        line.cells.zip(solution) { cell, state ->
-            cell.state = state
+fun Line.applyLogic() {
+
+    if (checkSolved()) {
+        return
+    }
+
+    // Get a partial solution by selecting all the positions that have the same state across all solutions
+    // that are possible given the current configuration.
+    val solution = possibleSolutions(this).reduce { result, next ->
+        result.zip(next) { current, newState ->
+            if (current == newState) current else UNKNOWN
         }
     }
+
+    // Apply the solution to the cells of this line
+    this.cells.zip(solution) { cell, state ->
+        cell.state = state
+    }
 }
+
 
 fun possibleSolutions(line: Line): List<LineState> {
     val all = allSolutions(line.hints, line.cells.size)
