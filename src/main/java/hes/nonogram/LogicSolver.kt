@@ -1,8 +1,10 @@
 package hes.nonogram
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+
 class LogicSolver(private val lineSolver: LineSolver = BasicSolver()) : PuzzleSolver {
 
-    val log by logger()
+    private val log = KotlinLogging.logger {}
 
     override fun solve(puzzle: Puzzle): Puzzle? {
 
