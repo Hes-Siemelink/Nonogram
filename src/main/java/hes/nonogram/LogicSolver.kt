@@ -54,13 +54,20 @@ class BasicSolver : LineSolver {
 }
 
 fun possibleSolutions(line: Line): List<List<State>> {
-    // TODO make more efficient byt combining filtering in 'allSolutions'.
     val all = allSolutions(line.hints, line.cells.size)
 
     return all.filter { line.isSolvedBy(it) }
 }
 
+val solutionsCache = mutableMapOf<Pair<Hints, Int>, List<List<State>>>()
+
 fun allSolutions(hints: Hints, length: Int): List<List<State>> {
+    return solutionsCache.getOrPut(Pair(hints, length)) {
+        generateAllSolutions(hints, length)
+    }
+}
+
+fun generateAllSolutions(hints: Hints, length: Int): List<List<State>> {
 
     val hint = hints.head
     val restOfHints = hints.tail
