@@ -2,10 +2,11 @@ package hes.nonogram
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.opentest4j.AssertionFailedError
 
+@ExtendWith(TestTimer::class)
 class PuzzleTest {
 
     @Test
@@ -182,7 +183,7 @@ class PuzzleTest {
     }
 
     @Test
-    @Disabled // Takes too long
+//    @Disabled // Takes too long
     fun `solve 30x30 puzzle with logic`() {
         val puzzle = nonogram {
             row(11, 1, 8)
