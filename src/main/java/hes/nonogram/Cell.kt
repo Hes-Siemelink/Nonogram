@@ -39,7 +39,7 @@ enum class State(private val value: Char) {
         return value.toString()
     }
 
-    fun times(size: Int): List<State> {
+    fun times(size: Int): LineState {
         return (1..size).map { this }
     }
 

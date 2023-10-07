@@ -35,7 +35,7 @@ class Line(val cells: List<Cell>, val hints: Hints) {
         return counted == hints || (counted.isEmpty() && hints == listOf(0))
     }
 
-    fun isSolvedBy(solution: List<State>): Boolean {
+    fun isSolvedBy(solution: LineState): Boolean {
         return cells.zip(solution).all { (current, solution) -> solution.solves(current.state) }
     }
 }

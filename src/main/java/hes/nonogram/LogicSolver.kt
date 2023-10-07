@@ -20,17 +20,23 @@ class LogicSolver(private val lineSolver: LineSolver = BasicSolver()) : PuzzleSo
 
     private fun applyLogic(puzzle: Puzzle) {
 
-        puzzle.rows.forEach { lineSolver.applyLogic(it) }
-        log.info { "Applied logic on rows:\n$puzzle\n" }
+        (puzzle.rows + puzzle.columns)
+            .sortedBy { it.score() }
+            .forEach {
+                lineSolver.applyLogic(it)
+            }
+        log.info { "Applied logic on rows and columns:\n$puzzle\n" }
 
-        puzzle.columns.forEach { lineSolver.applyLogic(it) }
-        log.info { "Applied logic on columns:\n$puzzle\n" }
     }
 }
 
 //
 // Lines
 //
+
+fun Line.score(): Int {
+    return cells.size - hints.sum() - hints.size + 1
+}
 
 interface LineSolver {
     fun applyLogic(line: Line)
@@ -53,26 +59,26 @@ class BasicSolver : LineSolver {
     }
 }
 
-fun possibleSolutions(line: Line): List<List<State>> {
+fun possibleSolutions(line: Line): List<LineState> {
     val all = allSolutions(line.hints, line.cells.size)
 
     return all.filter { line.isSolvedBy(it) }
 }
 
-val solutionsCache = mutableMapOf<Pair<Hints, Int>, List<List<State>>>()
-
-fun allSolutions(hints: Hints, length: Int): List<List<State>> {
+fun allSolutions(hints: Hints, length: Int): List<LineState> {
     return solutionsCache.getOrPut(Pair(hints, length)) {
         generateAllSolutions(hints, length)
     }
 }
 
-fun generateAllSolutions(hints: Hints, length: Int): List<List<State>> {
+val solutionsCache = mutableMapOf<Pair<Hints, Int>, List<LineState>>()
+
+fun generateAllSolutions(hints: Hints, length: Int): List<LineState> {
 
     val hint = hints.head
     val restOfHints = hints.tail
 
-    val all = mutableListOf<List<State>>()
+    val all = mutableListOf<LineState>()
     for (i in 0..length - hint) {
         val begin = State.EMPTY.times(i) + State.FILLED.times(hint)
 
@@ -86,12 +92,6 @@ fun generateAllSolutions(hints: Hints, length: Int): List<List<State>> {
             }
         }
     }
-
-    return all
-}
-
-fun Line.allSolutions(position: Int = 0): List<List<State>> {
-    val all = mutableListOf<List<State>>()
 
     return all
 }

@@ -80,6 +80,7 @@ data class Puzzle(
 }
 
 typealias Hints = List<Int>
+typealias LineState = List<State>
 
 class PuzzleSpec(
     val rowHints: MutableList<Hints> = mutableListOf(),
